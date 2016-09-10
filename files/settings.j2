@@ -1,0 +1,29 @@
+"""
+settings/staging.py
+"""
+
+from .base import *
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['*','127.0.0.1','172.20.0.161','localhost']
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '{{ db_name }}',
+        'USER': 'cougarbait',
+        'PASSWORD': '{{ db_password }}',
+        'HOST': '{{ db_host }}',
+        'PORT': '5432',
+        'ATOMIC_REQUESTS': True
+    }
+}
+
+HAYSTACK_CONNECTIONS = {
+   'default': {
+       'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+       'URL': 'http://demo-solrLoadBalancer-157529823.us-east-1.elb.amazonaws.com:8983/solr'
+   },
+}

@@ -1,0 +1,81 @@
+---
+- hosts: all
+  vars_files:
+    - vars.yml
+  gather_facts: false
+  become: True
+
+  tasks:
+    - name: Clone Repo
+      git: repo=https://github.com/edtechassociates/connected_campus-drf.git
+           dest=/var/www/html/connected_campus_city
+
+    - name: Presetup Install Post Gres
+      apt: name=libffi-dev    
+    
+    - name: Install Post Gres1
+      apt: name=libpq-dev
+ 
+    - name: Install Post Gres2
+      apt: name=python-dev
+
+    - name: Install Post Gres3
+      apt: name=postgresql
+    
+    - name: Install Post Gres4
+      apt: name=postgresql-contrib
+
+    - name: Install Nginx
+      apt: name=nginx
+
+    - name: install packages
+      pip: requirements=/var/www/html/connected_campus_city/requirements/base.txt
+    
+    - name: remove defualt nginx site
+      file: path=/etc/nginx/sites-enabled/default state=absent
+    
+    - name: copy nginx config
+      template: src=files/connected_campus_nginx.j2 dest=/etc/nginx/sites-enabled/{{ project_name }}.conf
+      notify:
+      - restart nginx
+
+#    - name: django migrate
+#      django_manage: command=migrate app_path={{ install_root }}/{{ project_name }} pythonpath={{ pythonpath }}
+
+    - name: create connected campus db or verify that exists
+      postgresql_db: name=cc_city_demo
+                     login_host=cc-city-demo.cdcmem41ehxk.us-east-1.rds.amazonaws.com
+                     login_user=cougarbait
+                     login_password=ETASummer16
+    
+    - name: java apt repo add for solr
+      apt_repository: repo='ppa:webupd8team/java' 
+    
+#    - name: install java 1.8 for solr
+#      apt: name=oracle-java8-installer
+
+    - name: copy settings config
+      template: src=files/settings.j2 dest=/{{ install_root }}/{{ project_name }}/persist-drf/settings/staging.py
+      notify:
+      - restart nginx      
+
+    - name:  Copy uwsgi settings
+      template: src=files/uwsgi.j2 dest=/{{ install_root }}/{{ project_name }}/uwsgi.ini
+      notify:
+      - restart nginx      
+
+    - name:  Copy uwsgi start
+      template: src=files/start_uwsgi.j2 dest=/{{ install_root }}/{{ project_name }}/start_uwsgi.sh
+#    - name: django migrate
+ #     django_manage: command=migrate app_path={{ install_root }}/{{ project_name }} pythonpath={{ pythonpath }}
+
+
+    - name: make sure nginx server is running
+      service: name=nginx state=started enabled=yes
+
+    - name: start uswgi
+      script: /{{ install_root }}/{{ project_name }}/start_uwsgi.sh
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted

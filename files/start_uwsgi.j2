@@ -1,0 +1,6 @@
+
+#!/bin/bash -ex
+
+#uwsgi --http :8000 --module persist-drf.wsgi:application
+
+uwsgi --ini /{{ install_root }}/{{ project_name }}/uwsgi.ini

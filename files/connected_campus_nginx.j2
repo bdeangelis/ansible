@@ -1,0 +1,54 @@
+# connected_campus-drf.conf
+
+# the upstream component nginx needs to connect to
+upstream {{project_name}} {
+    server unix:///var/www/html/{{project_name}}/persist.sock; # for a file socket
+#   server 127.0.0.1:8001; # for a web port socket (we'll use this first)
+}
+
+# configuration of the server
+server {
+    # the port your site will be served on
+    listen    8000;
+    # the domain name it will serve for
+    # substitute your machine's IP address or FQDN
+    server_name {{project_load_balancer}} 
+    #.mysite.com; 
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;   # adjust to taste
+
+    # Django media
+    location /media  {
+        # your Django project's media files - amend as required
+        alias {{install_root}}/{{project_name}}/media;
+    }
+
+    location /static {
+        # your Django project's static files - amend as required
+        alias {{install_root}}/{{project_name}}/static;
+    }
+
+    # Finally, send all non-media requests to the Django server.
+    location / {
+        uwsgi_pass {{project_name}};
+        # the uwsgi_params file you installed
+        include uwsgi_params;
+    }
+
+}
+
+#server {
+
+# listen 80;
+
+# root /var/www/html/connected_campus-ng/app; #or whereever your site files are
+# index index.html;
+
+# location /{
+#  try_files $uri $uri/ =404;
+# }
+
+#}
+

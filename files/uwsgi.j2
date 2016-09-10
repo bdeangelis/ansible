@@ -1,0 +1,59 @@
+[uwsgi]
+
+# ----- app related settings -----
+
+# the base directory (full path)
+#chdir=/var/www/html/connected_campus-drf
+chdir={{ install_root }}/{{ project_name }}
+
+# Django's wsgi file
+module=persist-drf.wsgi:application
+
+# port
+#http=8000
+
+# the virtualenv (full path)
+#home=~/.virtualenvs/persist-drf
+
+# process ID
+# pidfile=/tmp/uwsgi.pid
+
+# max-requests=5000
+
+
+# ----- process-related settings -----
+
+# master
+master=True
+
+# maximum number of worker processes
+processes=4
+
+# destroy workers hanging for more than 30 seconds
+harakiri = 30
+
+# threads per worker
+#threads=2
+
+# the socket (use the full path to be safe)
+socket=/{{ install_root }}/{{ project_name }}/persist.sock
+#socket=127.0.0.1:8000
+# socket permission
+chmod-socket=777
+
+#chown-socket=www-data:www-data
+
+# ----- daemonzing and monitoring -----
+
+# daemonize
+#daemonize=/var/log/uwsgi/%n.log
+daemonize=/{{ install_root }}/{{ project_name }}/flogs/%n.log
+
+# monitoring
+--stats 127.0.0.1:9191
+
+# ----- clean-up ------
+
+# clear environment on exit
+vacuum=True
+
