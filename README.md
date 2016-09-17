@@ -12,6 +12,14 @@ Install Git
 `sudo add-apt-repository ppa:git-core/ppa`  
 `sudo apt-get update`  
 `sudo apt-get install git`  
+Verify connection to Git 
+`ssh -T git@github.com`  
+If you get 'Permission denied (publickey).'
+Verify that ssh is running
+`eval "$(ssh-agent -s)"`  
+verify that ssh is available  
+`ssh-add -l` --lists all ssh keys
+`ssh-add <path_to_key>` --if no keys listed
 Clone Ansible Repo  
 
 ### Staging Setup  
