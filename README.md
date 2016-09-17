@@ -2,8 +2,16 @@
 ## Getting Started
 
 ### Ansible Setup  
-Install Ansible  
+Install pip  
+`sudo apt-get install python-pip`  
+Install Ansible Dependencies  
+`sudo pip install python-dev paramiko PyYAML Jinja2 httplib2 six sudo`  
+Install Ansible 
+`sudo pip install ansible`  
 Install Git  
+`sudo add-apt-repository ppa:git-core/ppa`  
+`sudo apt-get update`  
+`sudo apt-get install git`  
 Clone Ansible Repo  
 
 ### Staging Setup  
