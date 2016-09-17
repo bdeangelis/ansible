@@ -21,6 +21,7 @@ verify that ssh is available
 `ssh-add -l` --lists all ssh keys
 `ssh-add <path_to_key>` --if no keys listed
 Clone Ansible Repo  
+`git clone https://github.com/bdeangelis/ansible.git`
 
 ### Staging Setup  
 Create RDS Instance  
