@@ -5,7 +5,7 @@
 Install pip  
 `sudo apt-get install python-pip`  
 Install Ansible Dependencies  
-`sudo pip install python-dev paramiko PyYAML Jinja2 httplib2 six sudo`  
+`sudo pip install python-dev paramiko PyYAML Jinja2 httplib2 six markupsafe`  
 Install Ansible 
 `sudo pip install ansible`  
 Install Git  
@@ -18,10 +18,14 @@ If you get 'Permission denied (publickey).'
 Verify that ssh is running
 `eval "$(ssh-agent -s)"`  
 verify that ssh is available  
-`ssh-add -l` --lists all ssh keys
-`ssh-add <path_to_key>` --if no keys listed
+`ssh-agent bash`  
+Add ssh key  
+`ssh-add ~/.ssh/id_rsa`  
 Clone Ansible Repo  
 `git clone https://github.com/bdeangelis/ansible.git`
+Move Ansible hosts file to  
+`/etc/ansible/hosts`  
+
 
 ### Staging Setup  
 Create RDS Instance  
