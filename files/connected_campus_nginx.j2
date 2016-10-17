@@ -32,6 +32,9 @@ server {
 
     # Finally, send all non-media requests to the Django server.
     location / {
+        add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options DENY;
+        add_header Content-Security-Policy "frame-ancestors 'none'";
         uwsgi_pass {{project_name}};
         # the uwsgi_params file you installed
         include uwsgi_params;
